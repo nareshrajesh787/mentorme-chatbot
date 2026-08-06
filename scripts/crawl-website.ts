@@ -14,20 +14,36 @@ import type { WebsiteSource } from "../src/lib/knowledge/types";
 const USER_AGENT =
   "MentorMeKnowledgeBot/1.0 (+https://www.mentorga.org; offline knowledge sync)";
 const DEFAULT_MAX_PAGES = 150;
-const MINIMUM_FULL_CRAWL_PAGES = 50;
+// mentorga.org is a small nonprofit site (currently 14 pages), unlike the
+// larger site this pipeline was originally calibrated against (see the same
+// note on MINIMUM_WEBSITE_PAGES in verify-knowledge.ts). This is a sanity
+// floor to catch a badly broken crawl, not a size expectation.
+const MINIMUM_FULL_CRAWL_PAGES = 5;
 const MAXIMUM_FAILURE_RATIO = 0.25;
 const REQUEST_TIMEOUT_MS = 15_000;
 const REQUEST_DELAY_MS = 300;
 
-// The site serves static .html pages. Only a few paths have been confirmed
-// live (200 status) so far; sitemap discovery and in-page link following
-// (see discoverSitemapUrls/crawlWebsite below) find the rest. Add more
-// specific known page paths here once they're confirmed against the live site.
+// The site serves static .html pages with no robots.txt or sitemap.xml.
+// extractWebsiteSource() (below) deliberately strips <nav>/<header> before
+// extracting links, so nav-only pages (e.g. an "About" menu) are never
+// discovered by content-link-following alone and must be seeded explicitly.
+// This list was built by fetching the raw homepage HTML and checking every
+// href; re-check it (or add entries) if the site's nav structure changes.
 const SEED_URLS = [
   "https://www.mentorga.org/",
   "https://www.mentorga.org/contact-us.html",
   "https://www.mentorga.org/events.html",
   "https://www.mentorga.org/become-a-volunteer.html",
+  "https://www.mentorga.org/make-a-donation.html",
+  "https://www.mentorga.org/make-a-referral.html",
+  "https://www.mentorga.org/programs_onetoone.html",
+  "https://www.mentorga.org/programs_mentoringafterschool.html",
+  "https://www.mentorga.org/programs_connectclubs.html",
+  "https://www.mentorga.org/our-mission.html",
+  "https://www.mentorga.org/our-history.html",
+  "https://www.mentorga.org/our_impact.html",
+  "https://www.mentorga.org/meet-our-team.html",
+  "https://www.mentorga.org/in-the-news.html",
 ];
 
 const BLOCKED_PATH =

@@ -501,8 +501,7 @@ describe("incremental File Search reconciliation", () => {
 
 describe("knowledge automation safety gate", () => {
   // mentorga.org is a small nonprofit site; thresholds are loose lower
-  // bounds so routine site growth doesn't make this brittle. Update
-  // officialDocumentDocuments once official PDFs are registered.
+  // bounds so routine site growth doesn't make this brittle.
   it("verifies the complete current corpus", async () => {
     const summary = await verifyKnowledgeSnapshot();
     expect(summary.websiteDocuments).toBeGreaterThanOrEqual(5);
@@ -511,7 +510,7 @@ describe("knowledge automation safety gate", () => {
         summary.officialDocumentDocuments +
         summary.managerFaqDocuments,
     );
-    expect(summary.officialDocumentDocuments).toBe(0);
+    expect(summary.officialDocumentDocuments).toBe(4);
     expect(summary.managerFaqDocuments).toBe(0);
   });
 

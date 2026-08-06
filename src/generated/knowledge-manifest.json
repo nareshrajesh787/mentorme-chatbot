@@ -88,5 +88,95 @@
     "fetchedAt": "2026-08-06T22:59:39.153Z",
     "sourceType": "official_website",
     "priority": 50
+  },
+  {
+    "id": "web-in-the-news-html-38836c46",
+    "fileName": "website__web-in-the-news-html-38836c46.md",
+    "documentPath": "knowledge/generated/prepared/website__web-in-the-news-html-38836c46.md",
+    "title": "In the News | Mentor Me North Georgia | Empowering Today’s Youth | Non-Profit Mentoring Program",
+    "url": "https://www.mentorga.org/in-the-news.html",
+    "fetchedAt": "2026-08-06T23:22:02.431Z",
+    "sourceType": "official_website",
+    "priority": 50
+  },
+  {
+    "id": "web-meet-our-team-html-9f9d16cc",
+    "fileName": "website__web-meet-our-team-html-9f9d16cc.md",
+    "documentPath": "knowledge/generated/prepared/website__web-meet-our-team-html-9f9d16cc.md",
+    "title": "Our Team | Mentor Me North Georgia | Empowering Today’s Youth | Non-Profit Mentoring Program",
+    "url": "https://www.mentorga.org/meet-our-team.html",
+    "fetchedAt": "2026-08-06T23:22:02.027Z",
+    "sourceType": "official_website",
+    "priority": 50
+  },
+  {
+    "id": "web-our-impact-html-7f3f719c",
+    "fileName": "website__web-our-impact-html-7f3f719c.md",
+    "documentPath": "knowledge/generated/prepared/website__web-our-impact-html-7f3f719c.md",
+    "title": "See Our Impact | Mentor Me North Georgia | Empowering Today’s Youth | Non-Profit Mentoring Program",
+    "url": "https://www.mentorga.org/our_impact.html",
+    "fetchedAt": "2026-08-06T23:22:01.623Z",
+    "sourceType": "official_website",
+    "priority": 50
+  },
+  {
+    "id": "web-our-history-html-d2988edd",
+    "fileName": "website__web-our-history-html-d2988edd.md",
+    "documentPath": "knowledge/generated/prepared/website__web-our-history-html-d2988edd.md",
+    "title": "Our History | Mentor Me North Georgia | Empowering Today’s Youth | Non-Profit Mentoring Program",
+    "url": "https://www.mentorga.org/our-history.html",
+    "fetchedAt": "2026-08-06T23:22:01.200Z",
+    "sourceType": "official_website",
+    "priority": 50
+  },
+  {
+    "id": "web-our-mission-html-7b53f630",
+    "fileName": "website__web-our-mission-html-7b53f630.md",
+    "documentPath": "knowledge/generated/prepared/website__web-our-mission-html-7b53f630.md",
+    "title": "Our Mission | Mentor Me North Georgia | Empowering Today’s Youth | Non-Profit Mentoring Program",
+    "url": "https://www.mentorga.org/our-mission.html",
+    "fetchedAt": "2026-08-06T23:22:00.819Z",
+    "sourceType": "official_website",
+    "priority": 50
+  },
+  {
+    "id": "mas-volunteer-role-description-2022",
+    "fileName": "official_document__mas-volunteer-role-description-2022.pdf",
+    "documentPath": "knowledge/generated/prepared/official_document__mas-volunteer-role-description-2022.pdf",
+    "title": "Mentoring After School (MAS) Volunteer Role Description",
+    "url": "https://www.mentorga.org/MAS_VolunteerDesc_%202022.pdf",
+    "sourceType": "official_document",
+    "priority": 75,
+    "contentHash": "c46e6618a758e75ef035346a9bac86dccfa23e09bd23299d85d4bb4b38a09e56"
+  },
+  {
+    "id": "connect-club-small-group-leader-2022",
+    "fileName": "official_document__connect-club-small-group-leader-2022.pdf",
+    "documentPath": "knowledge/generated/prepared/official_document__connect-club-small-group-leader-2022.pdf",
+    "title": "MM Connect Club Small Group Leader Role Description",
+    "url": "https://www.mentorga.org/CC_Small-Group-Leader2022.pdf",
+    "sourceType": "official_document",
+    "priority": 75,
+    "contentHash": "1c70545409eec5b20e6e213f4958df2d3768092cd2f088473b98f90adb3141c6"
+  },
+  {
+    "id": "one-to-one-mentor-role-description-2022",
+    "fileName": "official_document__one-to-one-mentor-role-description-2022.pdf",
+    "documentPath": "knowledge/generated/prepared/official_document__one-to-one-mentor-role-description-2022.pdf",
+    "title": "One-to-One Mentor Role Description",
+    "url": "https://www.mentorga.org/one2one-mentor-desc-2022.pdf",
+    "sourceType": "official_document",
+    "priority": 75,
+    "contentHash": "208efc036214a5d1164139d5b185930ee17bae8428bfa1aba896eb470373d58e"
+  },
+  {
+    "id": "2024-impact-report",
+    "fileName": "official_document__2024-impact-report.pdf",
+    "documentPath": "knowledge/generated/prepared/official_document__2024-impact-report.pdf",
+    "title": "2024 MentorMe North Georgia Impact Report",
+    "url": "https://www.mentorga.org/2024-MM-ImpactReport_email.pdf",
+    "sourceType": "official_document",
+    "priority": 75,
+    "contentHash": "f65a675ac2a3458a91bb7ee35f4399f58097f78b65ba6cdc8b450bced56a2bbb"
   }
 ]
