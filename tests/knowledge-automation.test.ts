@@ -500,19 +500,19 @@ describe("incremental File Search reconciliation", () => {
 });
 
 describe("knowledge automation safety gate", () => {
-  // This fork has not been synced against a real Gemini project yet, so
-  // knowledge/generated is empty. Re-enable/adjust these thresholds once a
-  // real knowledge:crawl + knowledge:prepare pass has populated the corpus.
-  it.skip("verifies the complete current corpus", async () => {
+  // mentorga.org is a small nonprofit site; thresholds are loose lower
+  // bounds so routine site growth doesn't make this brittle. Update
+  // officialDocumentDocuments once official PDFs are registered.
+  it("verifies the complete current corpus", async () => {
     const summary = await verifyKnowledgeSnapshot();
-    expect(summary.websiteDocuments).toBeGreaterThanOrEqual(50);
+    expect(summary.websiteDocuments).toBeGreaterThanOrEqual(5);
     expect(summary.totalDocuments).toBe(
       summary.websiteDocuments +
         summary.officialDocumentDocuments +
         summary.managerFaqDocuments,
     );
-    expect(summary.officialDocumentDocuments).toBe(2);
-    expect(summary.pendingFaqDocuments).toBeGreaterThan(0);
+    expect(summary.officialDocumentDocuments).toBe(0);
+    expect(summary.managerFaqDocuments).toBe(0);
   });
 
   it("detects instruction-like retrieved content", () => {

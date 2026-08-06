@@ -19,10 +19,16 @@ const MAXIMUM_FAILURE_RATIO = 0.25;
 const REQUEST_TIMEOUT_MS = 15_000;
 const REQUEST_DELAY_MS = 300;
 
-// Only the homepage is seeded explicitly; sitemap discovery and in-page link
-// following (see discoverSitemapUrls/crawlWebsite below) find the rest. Add
+// The site serves static .html pages. Only a few paths have been confirmed
+// live (200 status) so far; sitemap discovery and in-page link following
+// (see discoverSitemapUrls/crawlWebsite below) find the rest. Add more
 // specific known page paths here once they're confirmed against the live site.
-const SEED_URLS = ["https://www.mentorga.org/"];
+const SEED_URLS = [
+  "https://www.mentorga.org/",
+  "https://www.mentorga.org/contact-us.html",
+  "https://www.mentorga.org/events.html",
+  "https://www.mentorga.org/become-a-volunteer.html",
+];
 
 const BLOCKED_PATH =
   /\/(?:wp-admin|wp-login|admin|login|logout|checkout|cart|account|search|feed|xmlrpc|wp-json)(?:\/|$)/i;
@@ -53,11 +59,16 @@ export interface CrawlReportForHealth {
 export function assertSafeCrawlSnapshot(
   sources: WebsiteSource[],
   report: CrawlReportForHealth,
+  hasPreviousCrawl = true,
 ): void {
   if (report.totalIndexed !== sources.length) {
     throw new Error("Crawl report count does not match the indexed page count.");
   }
+  // The minimum-page floor exists to stop a bad crawl from silently
+  // replacing an already-established corpus. There is nothing to protect on
+  // a first-ever crawl, so a small site isn't blocked from bootstrapping.
   if (
+    hasPreviousCrawl &&
     report.maxPages >= MINIMUM_FULL_CRAWL_PAGES &&
     sources.length < MINIMUM_FULL_CRAWL_PAGES
   ) {
@@ -701,7 +712,7 @@ async function main() {
     previousSources,
     approvedRemovalUrls,
   );
-  assertSafeCrawlSnapshot(sources, report);
+  assertSafeCrawlSnapshot(sources, report, previousSources.length > 0);
 
   await rm(websiteDir, { recursive: true, force: true });
   await mkdir(websiteDir, { recursive: true });

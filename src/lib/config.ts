@@ -11,10 +11,7 @@ export const ORG = {
   contact: {
     phone: "(678) 341-8028",
     email: "info@mentormenorthga.org",
-    // TODO: replace with the exact contact-page path once confirmed
-    // (mentorga.org/contact-us currently 404s); the site root is a safe
-    // fallback destination in the meantime.
-    url: "https://www.mentorga.org/",
+    url: "https://www.mentorga.org/contact-us.html",
   },
 } as const;
 

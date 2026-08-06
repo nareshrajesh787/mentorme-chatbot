@@ -270,7 +270,7 @@ export function ChatPanel({
             {
               id: "contact-mentorme",
               title: "Contact MentorMe",
-              url: "https://www.mentorga.org/",
+              url: "https://www.mentorga.org/contact-us.html",
               sourceType: "official_website",
             },
           ],

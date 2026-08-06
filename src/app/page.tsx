@@ -33,7 +33,7 @@ export default function Home() {
           <a href="#integration">Integration</a>
           <a
             className="header-contact"
-            href="https://www.mentorga.org/"
+            href="https://www.mentorga.org/contact-us.html"
             target="_blank"
             rel="noreferrer noopener"
           >

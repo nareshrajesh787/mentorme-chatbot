@@ -15,7 +15,10 @@ import {
   parseApprovedRemovalUrls,
 } from "./crawl-website";
 
-const MINIMUM_WEBSITE_PAGES = 50;
+// MentorMe's site is a small nonprofit site (currently 9 pages), unlike the
+// larger site this pipeline was originally calibrated against. The minimum
+// is a sanity floor to catch a badly broken crawl, not a size expectation.
+const MINIMUM_WEBSITE_PAGES = 5;
 const MAXIMUM_WEBSITE_PAGES = 150;
 const MAXIMUM_FAILURE_RATIO = 0.25;
 const MAXIMUM_MARKDOWN_DOCUMENT_BYTES = 512 * 1_024;
@@ -56,6 +59,23 @@ export interface KnowledgeVerificationSummary {
 
 async function readJson(filePath: string): Promise<unknown> {
   return JSON.parse(await readFile(filePath, "utf8"));
+}
+
+// manager-faq.json only exists once the optional FAQ stage has been run
+// against a staff doc; its absence just means zero FAQ entries.
+async function readJsonOrEmptyArray(filePath: string): Promise<unknown> {
+  try {
+    return await readJson(filePath);
+  } catch (error: unknown) {
+    if (
+      error instanceof Error &&
+      "code" in error &&
+      (error as Error & { code?: string }).code === "ENOENT"
+    ) {
+      return [];
+    }
+    throw error;
+  }
 }
 
 function isManifestEntry(value: unknown): value is SourceManifestEntry {
@@ -231,7 +251,7 @@ export async function verifyKnowledgeSnapshot(
       readJson(path.join(generatedDir, "sources.json")),
       readJson(path.resolve(root, "src/generated/knowledge-manifest.json")),
       readJson(path.join(generatedDir, "crawl-data.json")),
-      readJson(path.join(generatedDir, "manager-faq.json")),
+      readJsonOrEmptyArray(path.join(generatedDir, "manager-faq.json")),
       readJson(path.join(generatedDir, "crawl-report.json")),
       readJson(path.join(generatedDir, "crawl-health.json")),
       readJson(path.resolve(root, "knowledge/source/approved-removals.json")),

@@ -168,12 +168,9 @@ export async function prepareKnowledge(root = process.cwd()) {
   const preparedDir = path.join(generatedDir, "prepared");
   const srcGeneratedDir = path.resolve(root, "src/generated");
   const faqValue = await readJsonIfPresent(path.join(generatedDir, "manager-faq.json"));
-  if (!Array.isArray(faqValue)) {
-    throw new Error(
-      "manager-faq.json is missing. Run npm run knowledge:parse-faq first.",
-    );
-  }
-  const faqEntries = faqValue.filter(isFaqEntry);
+  // Missing manager-faq.json means the optional FAQ stage was skipped
+  // (no staff doc yet), not an error — treat it as zero FAQ entries.
+  const faqEntries = Array.isArray(faqValue) ? faqValue.filter(isFaqEntry) : [];
 
   const crawlValue = await readJsonIfPresent(path.join(generatedDir, "crawl-data.json"));
   const websiteSources = Array.isArray(crawlValue)
