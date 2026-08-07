@@ -22,3 +22,18 @@ export function MentorMeLogo({
     />
   );
 }
+
+export function LearnAILogo({
+  className,
+  decorative = false,
+}: Omit<BrandLogoProps, "priority">) {
+  return (
+    <Image
+      src="/branding/learnai-logo.png"
+      alt={decorative ? "" : "LearnAI"}
+      width={1254}
+      height={1254}
+      className={className}
+    />
+  );
+}

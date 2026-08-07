@@ -2,7 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import Home from "@/app/page";
-import { MentorMeLogo } from "@/components/branding/BrandLogos";
+import { LearnAILogo, MentorMeLogo } from "@/components/branding/BrandLogos";
 import { ChatPanel } from "@/components/chatbot/ChatPanel";
 
 afterEach(cleanup);
@@ -29,7 +29,7 @@ describe("product branding", () => {
     ).toBeGreaterThanOrEqual(3);
   });
 
-  it("shows MentorMe branding inside the chat panel", () => {
+  it("shows MentorMe branding and the LearnAI prototype credit inside the chat panel", () => {
     Object.defineProperty(HTMLElement.prototype, "scrollTo", {
       configurable: true,
       value: vi.fn(),
@@ -41,5 +41,16 @@ describe("product branding", () => {
     expect(
       sources.some((source) => source.includes("mentorme-logo.png")),
     ).toBe(true);
+    expect(
+      sources.some((source) => source.includes("learnai-logo.png")),
+    ).toBe(true);
+    expect(screen.getByText("LearnAI")).toBeDefined();
+  });
+
+  it("uses the LearnAI image asset", () => {
+    render(<LearnAILogo />);
+    expect(
+      imageSource(screen.getByAltText("LearnAI") as HTMLImageElement),
+    ).toContain("branding%2Flearnai-logo.png");
   });
 });

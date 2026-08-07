@@ -23,6 +23,7 @@ export const CHAT_UI_COPY = {
   en: {
     assistant: "Assistant",
     officialInformation: "Official information",
+    prototypeBy: "Prototype technology by",
     today: "Today",
     welcome:
       "Hi! I can help you find approved information from MentorMe North Georgia about mentoring programs, volunteering, enrollment, and more. What would you like help with?",
@@ -80,6 +81,7 @@ export const CHAT_UI_COPY = {
   es: {
     assistant: "Asistente",
     officialInformation: "Información oficial",
+    prototypeBy: "Tecnología prototipo de",
     today: "Hoy",
     welcome:
       "¡Hola! Puedo ayudarte a encontrar información aprobada de MentorMe North Georgia sobre programas de mentoría, voluntariado, inscripción y más. ¿En qué puedo ayudarte?",

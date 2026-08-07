@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 
-import { MentorMeLogo } from "@/components/branding/BrandLogos";
+import { LearnAILogo, MentorMeLogo } from "@/components/branding/BrandLogos";
 import { ChatInput } from "@/components/chatbot/ChatInput";
 import { LanguageSelector } from "@/components/chatbot/LanguageSelector";
 import { ChatMessage } from "@/components/chatbot/ChatMessage";
@@ -367,6 +367,11 @@ export function ChatPanel({
           </button>
         </div>
       </header>
+
+      <div className="prototype-strip">
+        <LearnAILogo className="prototype-logo" decorative />
+        <span>{copy.prototypeBy} <strong>LearnAI</strong></span>
+      </div>
 
       <div className="chat-language-bar">
         <LanguageSelector
