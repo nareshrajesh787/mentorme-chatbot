@@ -562,6 +562,11 @@ describe("deployment automation configuration", () => {
     expect(refresh).toContain("contents: write");
     expect(refresh).toContain("Guard the generated-file boundary");
     expect(refresh).toContain("Enforce a bounded automatic change set");
+    expect(refresh).toContain("if ! npm run knowledge:crawl");
+    expect(refresh).toContain("sleep 30");
+    expect(refresh.match(/npm run knowledge:crawl/g)).toHaveLength(2);
+    expect(refresh.match(/npm run knowledge:prepare/g)).toHaveLength(1);
+    expect(refresh.match(/npm run knowledge:verify/g)).toHaveLength(1);
     expect(refresh).toContain("changed_documents > 5");
     expect(refresh).toContain("deleted_documents != approved_removals");
     expect(refresh).toContain("deleted_documents > 2");

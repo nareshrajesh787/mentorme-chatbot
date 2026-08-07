@@ -5,7 +5,7 @@ The automation keeps Gemini credentials in Vercel only. GitHub Actions crawls an
 ## Workflow sequence
 
 1. `Detect and commit MentorMe website knowledge updates` runs daily, manually, or from an approved CMS webhook.
-2. It crawls only public `mentorga.org` pages, rejects off-domain fetch and redirect targets, revalidates previously approved URLs, preserves unchanged timestamps, prepares the corpus, and runs the knowledge verifier.
+2. It crawls only public `mentorga.org` pages, rejects off-domain fetch and redirect targets, revalidates previously approved URLs, preserves unchanged timestamps, prepares the corpus, and runs the knowledge verifier. A failed crawl receives one bounded retry after 30 seconds; preparation and verification are not repeated or bypassed.
 3. Failed, incomplete, redirected, missing, or suspiciously shrunken approved pages retain their last-known-good documents. Permanent removal requires a canonical URL already committed to `knowledge/source/approved-removals.json` after human review.
 4. The four registered official PDFs are rebuilt from checksum-verified files in `knowledge/source/official-documents/`; the website crawler neither owns nor removes them.
 5. If crawl health and prepared retrieval content are unchanged, the workflow creates no commit. No Vercel deployment or Gemini request occurs.
@@ -75,7 +75,7 @@ Only the final apply command mutates the existing store. Use `--new-store` only 
 ## Failure behavior
 
 - No meaningful website change: no commit, deployment, or Gemini request.
-- Crawl, extraction, corpus, prompt-injection, test, lint, typecheck, build, or diff failure: no commit or deployment.
+- A transient crawl failure is retried once after 30 seconds. A second crawl failure, or any extraction, corpus, prompt-injection, test, lint, typecheck, build, or diff failure: no commit or deployment.
 - More than five changed prepared documents, more than two removals, a non-website deletion, or a deletion without exact human approval: no commit; manual review is required.
 - Approved-page fetch or suspicious-shrink failure: last-known-good content is retained and reported.
 - Staff FAQ or out-of-boundary file change: no commit.

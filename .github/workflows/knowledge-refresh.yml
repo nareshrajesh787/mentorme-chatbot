@@ -36,7 +36,15 @@ jobs:
         run: npm ci
 
       - name: Crawl, prepare, and verify public website content
-        run: npm run knowledge:refresh
+        shell: bash
+        run: |
+          if ! npm run knowledge:crawl; then
+            echo "The public website crawl failed once; waiting 30 seconds before one bounded retry."
+            sleep 30
+            npm run knowledge:crawl
+          fi
+          npm run knowledge:prepare
+          npm run knowledge:verify
 
       - name: Detect meaningful corpus changes
         id: changes
