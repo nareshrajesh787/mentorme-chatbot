@@ -35,6 +35,29 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Diagnose MentorMe website reachability
+        continue-on-error: true
+        shell: bash
+        run: |
+          getent ahostsv4 www.mentorga.org || true
+          curl --ipv4 --silent --show-error --output /dev/null \
+            --connect-timeout 10 --max-time 20 \
+            --write-out 'curl status=%{http_code} connect=%{time_connect}s total=%{time_total}s\n' \
+            https://www.mentorga.org/
+          node --input-type=module -e '
+            const started = Date.now();
+            try {
+              const response = await fetch("https://www.mentorga.org/", {
+                redirect: "follow",
+                signal: AbortSignal.timeout(20000),
+              });
+              console.log(`node-fetch status=${response.status} total=${Date.now() - started}ms`);
+            } catch (error) {
+              console.log(`node-fetch error=${error?.name || "unknown"} code=${error?.cause?.code || "none"} total=${Date.now() - started}ms`);
+              process.exitCode = 1;
+            }
+          '
+
       - name: Crawl, prepare, and verify public website content
         run: npm run knowledge:refresh
 
