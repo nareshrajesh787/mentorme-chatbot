@@ -21,7 +21,7 @@ import { uploadToFileSearchStoreOverHttps } from "./file-search-upload";
 const POLL_INTERVAL_MS = 2_000;
 const OPERATION_TIMEOUT_MS = 10 * 60 * 1_000;
 const UPLOAD_ATTEMPTS = 3;
-const MANAGED_BY = "the-place-chatbot";
+const MANAGED_BY = "mentorme-chatbot";
 
 export interface DesiredDocumentFingerprint {
   sourceId: string;

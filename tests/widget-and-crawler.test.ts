@@ -34,7 +34,9 @@ describe("widget and crawler boundaries", () => {
 
   it("uses the local MentorMe logo in the framework-independent launcher", () => {
     const loader = readFileSync("public/widget-loader.js", "utf8");
-    expect(loader).toContain("/branding/the-place-logo.png");
+    expect(loader).toContain("/branding/mentorme-logo.png");
+    expect(loader).not.toContain("the-place");
+    expect(loader).not.toContain("thePlace");
     expect(loader).toContain('logoImage.alt = ""');
     expect(loader).toContain("chatbotUrl.origin !== scriptUrl.origin");
     expect(loader).toContain('resizeButton.addEventListener("pointerdown"');
@@ -42,10 +44,20 @@ describe("widget and crawler boundaries", () => {
     expect(loader).toContain(".tp-resize{display:none}");
     expect(loader).toContain('script.getAttribute("data-prompt")');
     expect(loader).toContain('script.getAttribute("data-prompt-text")');
-    expect(loader).toContain("the-place-chatbot-nudge-seen");
+    expect(loader).toContain("mentorme-chatbot-nudge-seen");
     expect(loader).toContain("nudgeText.textContent = promptText");
     expect(loader).toContain('nudgeAction.addEventListener("click"');
     expect(loader).toContain('nudgeClose.addEventListener("click"');
+  });
+
+  it("uses MentorMe's brand colors, not The Place's original palette", () => {
+    const loader = readFileSync("public/widget-loader.js", "utf8");
+    const stalePlaceColors = ["#003b59", "#e15a9a", "#7d4b8e", "#b92f70", "#292f4c"];
+    for (const color of stalePlaceColors) {
+      expect(loader).not.toContain(color);
+    }
+    expect(loader).toContain("#4a2268");
+    expect(loader).toContain("#632d8f");
   });
 
   it("keeps the crawler on public MentorMe HTML routes", () => {

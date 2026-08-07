@@ -3,7 +3,7 @@ import type { ChatLanguagePreference } from "@/lib/chat/language";
 import type { ChatResponse, ChatSource } from "@/lib/knowledge/types";
 
 export const CONTACT_SOURCE: ChatSource = {
-  id: "contact-the-place",
+  id: "contact-mentorme",
   title: "Contact MentorMe",
   url: ORG.contact.url,
   sourceType: "official_website",

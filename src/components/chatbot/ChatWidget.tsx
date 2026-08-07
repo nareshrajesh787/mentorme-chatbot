@@ -8,7 +8,7 @@ import { ChatIcon, CloseIcon } from "@/components/chatbot/Icons";
 
 export const CHAT_NUDGE_DELAY_MS = 2200;
 export const CHAT_NUDGE_VISIBLE_MS = 9000;
-export const CHAT_NUDGE_SESSION_KEY = "the-place-chatbot-nudge-seen";
+export const CHAT_NUDGE_SESSION_KEY = "mentorme-chatbot-nudge-seen";
 
 interface ChatWidgetProps {
   variant?: "floating" | "embedded";

@@ -118,13 +118,13 @@
       "url": "https://www.mentorga.org/2024-MM-ImpactReport_email.pdf"
     }
   ],
-  "totalDocumentsUploaded": 4,
+  "totalDocumentsUploaded": 18,
   "uploadFailures": [],
-  "fileSearchStoreName": "fileSearchStores/mentorme-grounded-knowledge-kak204p3z5hp",
-  "syncMode": "reconcile",
+  "fileSearchStoreName": "fileSearchStores/mentorme-grounded-knowledge-sfl2wn3anp4q",
+  "syncMode": "new-store",
   "totalDocumentsDeleted": 0,
-  "totalDocumentsUnchanged": 18,
+  "totalDocumentsUnchanged": 0,
   "managedDocumentsAfterSync": 18,
   "deleteFailures": [],
-  "uploadedAt": "2026-08-06T23:27:28.030Z"
+  "uploadedAt": "2026-08-07T01:15:07.299Z"
 }
