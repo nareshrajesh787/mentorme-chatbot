@@ -15,13 +15,14 @@ This repository is forked from [theplacechatbot](https://github.com/shreyasbodda
 - `POST /api/chat` with File Search-only Gemini grounding
 - `GET /api/health` with non-secret configuration status
 - A robots-aware, same-origin website crawler (targets `mentorga.org`)
+- A fail-closed daily GitHub Actions refresh that commits only bounded, verified website changes
 - Optional staff DOCX FAQ parsing (approved/pending separation) — no-ops cleanly if no doc is present
 - Prepared website/FAQ Markdown and checksum-verified official documents
 - Gemini File Search create/reuse, upload, list, and manual-delete scripts
 - Local sensitive-data detection, Zod validation, source URL allowlisting, and best-effort rate limiting
 - Automated tests and a manual review checklist
 
-**Not included in this version:** the automated GitHub Actions crawl/auto-deploy pipeline from the reference app. Knowledge refresh is manual for now (run the scripts below when you want to update the corpus); the automation can be added later once the basic bot is validated.
+Website knowledge refresh is automated without placing Gemini credentials in GitHub. See [Knowledge automation setup and operations](docs/knowledge-automation.md) for its guardrails, one-time repository setting, Vercel handoff, and failure behavior.
 
 ## Architecture
 
@@ -343,7 +344,9 @@ The current official Vercel workflow is documented at [Deploying a project from 
 
 ## Refreshing website information
 
-Knowledge refresh is manual in this version — run these locally (or in CI you set up yourself) when you want to pick up website changes:
+The credential-free GitHub Actions workflow checks the public MentorMe website daily. It creates no commit when the verified retrieval corpus is unchanged. When a bounded change passes every safety gate, it commits generated knowledge directly to `main`; Vercel then uses its Production-only Gemini configuration to reconcile File Search before deployment.
+
+You can also run the same crawl and verification stages locally:
 
 ```bash
 npm run knowledge:crawl
@@ -351,7 +354,7 @@ npm run knowledge:prepare
 npm run knowledge:verify
 ```
 
-This intentionally does not reparse or alter staff FAQ approval. Inspect `crawl-report.json`, `sync-report.json`, and the generated diff. Preview and apply the existing-store reconciliation with:
+Neither the automated nor manual website refresh reparses or alters staff FAQ approval. Inspect `crawl-report.json`, `sync-report.json`, and the generated diff. Preview and apply the existing-store reconciliation with:
 
 ```bash
 npm run knowledge:sync -- --reconcile
@@ -360,7 +363,7 @@ npm run knowledge:sync -- --reconcile --apply
 
 Use `--new-store` only for initial setup, ownership transfer, or an intentional blue/green rebuild. Reusing a store without `--reconcile` is rejected so duplicate documents cannot accumulate accidentally.
 
-**Adding automation later:** the reference app this was forked from includes a fail-closed GitHub Actions pipeline that crawls daily, auto-commits bounded changes to `main`, and triggers a guarded Vercel production rebuild that reconciles Gemini File Search. That automation was intentionally left out of this first version to keep initial setup simple. It can be ported back in once the manual flow above is validated — see the reference repo (`github.com/shreyasboddani/theplacechatbot`) for the pattern (`.github/workflows/knowledge-refresh.yml` and `docs/knowledge-automation.md`).
+For the daily schedule, CMS dispatch event, repository permissions, deletion approvals, and rollback behavior, see [Knowledge automation setup and operations](docs/knowledge-automation.md).
 
 ## Privacy, security, and reliability notes
 
@@ -381,14 +384,14 @@ Use `--new-store` only for initial setup, ownership transfer, or an intentional 
 
 ## Prototype limitations and production hardening
 
-- File Search quality depends on the latest successful knowledge synchronization and staff review — this fork has not yet been synced against a real Gemini project (no crawl or FAQ content has been indexed yet).
+- File Search quality depends on the latest successful knowledge synchronization and periodic human review of crawl and sync reports.
 - The crawler uses practical main-content extraction; synchronization reports should be audited periodically for missing, duplicated, retained, or layout-heavy pages.
 - Semantic retrieval can miss relevant wording. The citation gate favors a safe fallback over an unsupported answer.
 - The app does not authenticate visitors or connect to MentorMe's internal systems.
 - In-memory rate limiting is not a strong production control.
 - Before broad public promotion, configure a Vercel Firewall rate-limit rule for `POST /api/chat`, plus a formal content-review workflow, uptime/error monitoring that excludes message text, accessibility testing with assistive technologies, retention/legal review, and a documented incident/rollback procedure.
 - Review Gemini and Vercel quotas, billing, and data-processing terms for MentorMe's expected traffic. Free-tier availability and limits can change.
-- Automated public-site refresh (auto-crawl + auto-deploy) was intentionally deferred — see "Adding automation later" above.
+- The automated refresh is fail-closed; a large site-wide change or removal requires manual review rather than being committed automatically.
 
 ## Packages used
 

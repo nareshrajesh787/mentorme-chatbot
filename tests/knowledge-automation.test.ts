@@ -541,15 +541,51 @@ describe("knowledge automation safety gate", () => {
 });
 
 describe("deployment automation configuration", () => {
-  // The automated crawl/auto-deploy pipeline (knowledge-refresh.yml) from the
-  // reference app was intentionally left out of this fork's first version;
-  // knowledge refresh is manual for now. Only the remaining CI workflow is
-  // checked here.
-  it("keeps GitHub CI credential-free, valid, and pinned", () => {
-    const source = readFileSync(".github/workflows/ci.yml", "utf8");
-    expect(() => parse(source)).not.toThrow();
-    expect(source).not.toMatch(/uses:\s+[^\s@]+@(?![a-f0-9]{40}(?:\s|$))/i);
-    expect(source).not.toContain("GEMINI_API_KEY");
+  it("keeps GitHub crawling credential-free, valid, and pinned", () => {
+    const workflowFiles = [
+      ".github/workflows/ci.yml",
+      ".github/workflows/knowledge-refresh.yml",
+    ];
+    for (const filePath of workflowFiles) {
+      const source = readFileSync(filePath, "utf8");
+      expect(() => parse(source)).not.toThrow();
+      expect(source).not.toMatch(/uses:\s+[^\s@]+@(?![a-f0-9]{40}(?:\s|$))/i);
+    }
+
+    const refresh = readFileSync(
+      ".github/workflows/knowledge-refresh.yml",
+      "utf8",
+    );
+    expect(refresh).toContain("schedule:");
+    expect(refresh).toContain("mentorme-website-updated");
+    expect(refresh).toContain("ref: main");
+    expect(refresh).toContain("contents: write");
+    expect(refresh).toContain("Guard the generated-file boundary");
+    expect(refresh).toContain("Enforce a bounded automatic change set");
+    expect(refresh).toContain("changed_documents > 5");
+    expect(refresh).toContain("deleted_documents != approved_removals");
+    expect(refresh).toContain("deleted_documents > 2");
+    expect(refresh).toContain("website__[^/]+\\.md");
+    expect(refresh).toContain("approvedRemovedPages.length");
+    expect(refresh).toContain(
+      "git status --porcelain --untracked-files=all -- knowledge/generated/prepared",
+    );
+    expect(refresh).toMatch(
+      /staff_faq_changes="\$\(git status --porcelain --untracked-files=all/,
+    );
+    expect(refresh).toContain("manager_faq__*.md");
+    expect(refresh).toContain("Run the complete safety gate");
+    expect(refresh).toContain("npm audit --audit-level=high");
+    expect(refresh).toContain("npm exec tsc -- --noEmit");
+    expect(refresh).toMatch(
+      /knowledge_changes="\$\(git status --porcelain --untracked-files=all/,
+    );
+    expect(refresh).toContain("git push origin HEAD:main");
+    expect(refresh).toContain("Vercel will reconcile Gemini");
+    expect(refresh).not.toContain("pull-requests: write");
+    expect(refresh).not.toContain("gh pr");
+    expect(refresh).not.toContain("GEMINI_API_KEY");
+    expect(refresh).not.toContain("knowledge:sync");
   });
 
   it("runs reconciliation only in the Vercel production build", () => {
