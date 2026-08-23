@@ -378,7 +378,7 @@ For the daily schedule, CMS dispatch event, repository permissions, deletion app
 - The optional language preference is restricted to `auto`, `en`, or `es`; arbitrary browser values cannot enter the system instruction.
 - The API requires `application/json`, model-generated images are not loaded, the widget iframe is same-origin with its loader, and response security headers limit framing to MentorMe's domain.
 - Production provider failures log only error type/status/code metadata, never visitor message text.
-- The in-memory rate limiter is best-effort only. Serverless instances do not share its state, so production should use a durable distributed limiter if abuse risk warrants it.
+- `POST /api/chat` is rate limited in-memory with two tiers — 8 requests/minute and 20 requests/10 minutes per client IP — to catch both rapid bursts and slower sustained abuse. This remains best-effort: Vercel serverless instances do not share memory, so the effective limit is per-instance, not global. See [Prototype limitations](#prototype-limitations-and-production-hardening).
 - No browser analytics or transcript persistence is included by default.
 - The launcher suggestion stores only a non-sensitive, once-per-session "seen" flag in `sessionStorage`.
 
@@ -388,8 +388,8 @@ For the daily schedule, CMS dispatch event, repository permissions, deletion app
 - The crawler uses practical main-content extraction; synchronization reports should be audited periodically for missing, duplicated, retained, or layout-heavy pages.
 - Semantic retrieval can miss relevant wording. The citation gate favors a safe fallback over an unsupported answer.
 - The app does not authenticate visitors or connect to MentorMe's internal systems.
-- In-memory rate limiting is not a strong production control.
-- Before broad public promotion, configure a Vercel Firewall rate-limit rule for `POST /api/chat`, plus a formal content-review workflow, uptime/error monitoring that excludes message text, accessibility testing with assistive technologies, retention/legal review, and a documented incident/rollback procedure.
+- In-memory rate limiting (even hardened with a burst tier) is not a strong production control: each serverless instance tracks its own counters, so an attacker distributed across enough concurrent instances can exceed the intended global limit. This tradeoff was chosen deliberately for this low-traffic nonprofit prototype to avoid adding an external service dependency; revisit if traffic or abuse risk grows.
+- Before broad public promotion, configure a Vercel Firewall rate-limit rule for `POST /api/chat` (or replace the in-memory limiter with a durable shared store such as Vercel KV or Upstash Redis), plus a formal content-review workflow, uptime/error monitoring that excludes message text, accessibility testing with assistive technologies, retention/legal review, and a documented incident/rollback procedure.
 - Review Gemini and Vercel quotas, billing, and data-processing terms for MentorMe's expected traffic. Free-tier availability and limits can change.
 - The automated refresh is fail-closed; a large site-wide change or removal requires manual review rather than being committed automatically.
 
