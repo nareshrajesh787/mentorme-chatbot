@@ -376,7 +376,7 @@ For the daily schedule, CMS dispatch event, repository permissions, deletion app
 - The crawler revalidates both requested and final redirect hosts so off-domain content cannot enter the approved corpus through a redirect or external sitemap.
 - Request size, the 600-character message limit, history length, timeout, and response shape are bounded.
 - The optional language preference is restricted to `auto`, `en`, or `es`; arbitrary browser values cannot enter the system instruction.
-- The API requires `application/json`, model-generated images are not loaded, the widget iframe is same-origin with its loader, and response security headers limit framing to MentorMe's domain.
+- The API requires `application/json`, model-generated images are not loaded, and the widget iframe is same-origin with its loader. `frame-ancestors` is intentionally open (`*`) so the widget can be embedded on any site — this is a deliberate tradeoff that gives up clickjacking-style protection for `/embed` in exchange for general-purpose embeddability; it is not scoped to MentorMe's domain.
 - Production provider failures log only error type/status/code metadata, never visitor message text.
 - `POST /api/chat` is rate limited in-memory with two tiers — 8 requests/minute and 20 requests/10 minutes per client IP — to catch both rapid bursts and slower sustained abuse. This remains best-effort: Vercel serverless instances do not share memory, so the effective limit is per-instance, not global. See [Prototype limitations](#prototype-limitations-and-production-hardening).
 - No browser analytics or transcript persistence is included by default.

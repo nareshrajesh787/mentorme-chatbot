@@ -12,7 +12,11 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-src 'self'",
-  "frame-ancestors 'self' https://mentorga.org https://*.mentorga.org",
+  // Intentionally open: the widget is meant to be embeddable on any site,
+  // not just mentorga.org. This does remove clickjacking-style protection
+  // for the iframe views (/embed) — a deliberate tradeoff for a
+  // general-purpose embeddable widget, decided 2026-08-07.
+  "frame-ancestors *",
   ...(isDevelopment ? [] : ["upgrade-insecure-requests"]),
 ].join("; ");
 
