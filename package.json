@@ -13,6 +13,7 @@
     "knowledge:crawl": "tsx scripts/crawl-website.ts",
     "knowledge:parse-faq": "tsx scripts/parse-manager-faq.ts",
     "knowledge:prepare": "tsx scripts/prepare-knowledge.ts",
+    "knowledge:prepare:website": "tsx scripts/prepare-knowledge.ts --website-only",
     "knowledge:verify": "tsx scripts/verify-knowledge.ts",
     "knowledge:refresh": "npm run knowledge:crawl && npm run knowledge:prepare && npm run knowledge:verify",
     "knowledge:sync": "tsx scripts/sync-file-search.ts",

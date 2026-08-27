@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -163,7 +163,33 @@ function potentialWebsiteMatches(
   });
 }
 
-export async function prepareKnowledge(root = process.cwd()) {
+/**
+ * Replace only crawler-owned website documents. Staff FAQ and official-document
+ * files are maintained by separate approval flows and must survive a website
+ * refresh, even when the crawl is retried or produces no content changes.
+ */
+export async function removePreparedWebsiteDocuments(
+  preparedDir: string,
+): Promise<void> {
+  await mkdir(preparedDir, { recursive: true });
+  const entries = await readdir(preparedDir, { withFileTypes: true });
+  await Promise.all(
+    entries
+      .filter(
+        (entry) =>
+          entry.isFile() &&
+          entry.name.startsWith("website__") &&
+          entry.name.endsWith(".md"),
+      )
+      .map((entry) => rm(path.join(preparedDir, entry.name))),
+  );
+}
+
+export async function prepareKnowledge(
+  root = process.cwd(),
+  options: { websiteOnly?: boolean } = {},
+) {
+  const websiteOnly = options.websiteOnly === true;
   const generatedDir = path.resolve(root, "knowledge/generated");
   const preparedDir = path.join(generatedDir, "prepared");
   const srcGeneratedDir = path.resolve(root, "src/generated");
@@ -221,8 +247,12 @@ export async function prepareKnowledge(root = process.cwd()) {
     }),
   );
 
-  await rm(preparedDir, { recursive: true, force: true });
-  await mkdir(preparedDir, { recursive: true });
+  if (websiteOnly) {
+    await removePreparedWebsiteDocuments(preparedDir);
+  } else {
+    await rm(preparedDir, { recursive: true, force: true });
+    await mkdir(preparedDir, { recursive: true });
+  }
   await mkdir(srcGeneratedDir, { recursive: true });
 
   const manifest: SourceManifestEntry[] = [];
@@ -246,7 +276,9 @@ export async function prepareKnowledge(root = process.cwd()) {
   for (const entry of approvedFaq) {
     const fileName = `manager_faq__${entry.id}.md`;
     const relativePath = `knowledge/generated/prepared/${fileName}`;
-    await writeFile(path.join(preparedDir, fileName), faqMarkdown(entry), "utf8");
+    if (!websiteOnly) {
+      await writeFile(path.join(preparedDir, fileName), faqMarkdown(entry), "utf8");
+    }
     manifest.push({
       id: entry.id,
       fileName,
@@ -260,7 +292,9 @@ export async function prepareKnowledge(root = process.cwd()) {
   for (const { source, content } of officialDocumentFiles) {
     const fileName = `official_document__${source.id}.pdf`;
     const relativePath = `knowledge/generated/prepared/${fileName}`;
-    await writeFile(path.join(preparedDir, fileName), content);
+    if (!websiteOnly) {
+      await writeFile(path.join(preparedDir, fileName), content);
+    }
     manifest.push({
       id: source.id,
       fileName,
@@ -347,7 +381,10 @@ export async function prepareKnowledge(root = process.cwd()) {
 }
 
 async function main() {
-  const { manifest, syncReport } = await prepareKnowledge();
+  const websiteOnly = process.argv.includes("--website-only");
+  const { manifest, syncReport } = await prepareKnowledge(process.cwd(), {
+    websiteOnly,
+  });
   process.stdout.write(
     `Prepared ${manifest.length} approved documents (${String(syncReport.pendingFaqEntries.length)} FAQ entries withheld).\n`,
   );

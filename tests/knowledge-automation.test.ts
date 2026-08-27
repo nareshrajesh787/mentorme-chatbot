@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { readFileSync } from "node:fs";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { parse } from "yaml";
 
 import {
@@ -21,6 +24,7 @@ import {
   type DesiredDocumentFingerprint,
   type RemoteDocumentFingerprint,
 } from "../scripts/sync-file-search";
+import { removePreparedWebsiteDocuments } from "../scripts/prepare-knowledge";
 import {
   uploadToFileSearchStoreOverHttps,
   type HttpsTransportRequest,
@@ -48,6 +52,33 @@ function websiteSource(overrides: Partial<WebsiteSource> = {}): WebsiteSource {
 }
 
 describe("automated website refresh", () => {
+  it("replaces only crawler-owned website documents during preparation", async () => {
+    const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "mentorme-prepare-"));
+    const preparedDir = path.join(temporaryRoot, "prepared");
+    await mkdir(preparedDir);
+    await Promise.all([
+      writeFile(path.join(preparedDir, "website__obsolete.md"), "obsolete"),
+      writeFile(path.join(preparedDir, "manager_faq__approved.md"), "approved"),
+      writeFile(path.join(preparedDir, "official_document__handbook.pdf"), "pdf"),
+    ]);
+
+    try {
+      await removePreparedWebsiteDocuments(preparedDir);
+
+      await expect(
+        readFile(path.join(preparedDir, "website__obsolete.md"), "utf8"),
+      ).rejects.toMatchObject({ code: "ENOENT" });
+      await expect(
+        readFile(path.join(preparedDir, "manager_faq__approved.md"), "utf8"),
+      ).resolves.toBe("approved");
+      await expect(
+        readFile(path.join(preparedDir, "official_document__handbook.pdf"), "utf8"),
+      ).resolves.toBe("pdf");
+    } finally {
+      await rm(temporaryRoot, { recursive: true, force: true });
+    }
+  });
+
   it("preserves timestamps for semantically unchanged pages", () => {
     const previous = websiteSource();
     const recrawled = websiteSource({ fetchedAt: "2026-07-24T00:00:00.000Z" });
@@ -562,10 +593,11 @@ describe("deployment automation configuration", () => {
     expect(refresh).toContain("contents: write");
     expect(refresh).toContain("Guard the generated-file boundary");
     expect(refresh).toContain("Enforce a bounded automatic change set");
-    expect(refresh).toContain("if ! npm run knowledge:crawl");
-    expect(refresh).toContain("sleep 30");
-    expect(refresh.match(/npm run knowledge:crawl/g)).toHaveLength(2);
-    expect(refresh.match(/npm run knowledge:prepare/g)).toHaveLength(1);
+    expect(refresh).toContain("for attempt in 1 2 3");
+    expect(refresh).toContain("delay_seconds=$(( attempt * 30 ))");
+    expect(refresh).toContain('sleep "$delay_seconds"');
+    expect(refresh.match(/npm run knowledge:crawl/g)).toHaveLength(1);
+    expect(refresh.match(/npm run knowledge:prepare:website/g)).toHaveLength(1);
     expect(refresh.match(/npm run knowledge:verify/g)).toHaveLength(1);
     expect(refresh).toContain("changed_documents > 5");
     expect(refresh).toContain("deleted_documents != approved_removals");
