@@ -14,12 +14,8 @@ Canonical URL: https://www.mentorga.org/programs_mentoringafterschool.html
 Mentoring After School Program
 Mentoring After School (MAS) assists elementary school students throughout the school year...
 Available Times & Locations
-2026 SUMMER MAS PROGRAM SESSIONS
-Cumming Library: Mondays and Wednesdays 4:30-5:30 PM
-Denmark Library: Thursdays 4:00-5:00 PM
-Post Road Library: Thursdays 4:00-5:00 PM
 
 ## Relevant official links
 
-- https://www.mentorga.org/images/MAS-2026-SUMMER-FLYER-MENTOR.pdf: https://www.mentorga.org/images/MAS-2026-SUMMER-FLYER-MENTOR.pdf
-- https://www.mentorga.org/images/2026-Student-Summer-MAS-Flyer.pdf: https://www.mentorga.org/images/2026-Student-Summer-MAS-Flyer.pdf
+- https://www.mentorga.org/images/2026-2027-Mentoring-After-School-Volunteer-Flyer.pdf: https://www.mentorga.org/images/2026-2027-Mentoring-After-School-Volunteer-Flyer.pdf
+- https://www.mentorga.org/images/2026-2027-Student-Mentoring-After-School-Mentee-Flyer.pdf: https://www.mentorga.org/images/2026-2027-Student-Mentoring-After-School-Mentee-Flyer.pdf

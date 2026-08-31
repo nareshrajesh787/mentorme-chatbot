@@ -13,13 +13,13 @@ Canonical URL: https://www.mentorga.org/events.html
 
 Events
 Upcoming Events
-Mentor Me Masters: Golf Tournament hosted @ Tin Cup - Cumming City Center
-July 17th, 2026 at 9:00 a.m.
+Mentor Me MEGA Bowling Tournament
+Saturday, October 24th, 2026, 10:00 a.m.-12:00 p.m.
 Click here to Sponsor
 ,
 or here for More Information.
-Rock & Bowl:
-October 24, 2026 at 10:00 a.m.
+Dine to Donate: Giving Tuesday
+December 1, 2026 at Cherry Street Brewpub - Halcyon 4:30-7:30 p.m.
 Click here to Sponsor
 ,
 or here for More Information.

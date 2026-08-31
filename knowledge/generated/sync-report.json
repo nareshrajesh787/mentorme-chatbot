@@ -1,5 +1,5 @@
 {
-  "preparedAt": "2026-08-06T23:26:36.249Z",
+  "preparedAt": "2026-08-31T17:04:38.600Z",
   "successfullyIndexedPages": [
     {
       "id": "web-home-873d927d",
@@ -23,7 +23,7 @@
       "id": "web-events-html-6561beca",
       "title": "Events | Mentor Me North Georgia | Empowering Today’s Youth | Non-Profit Mentoring Program",
       "url": "https://www.mentorga.org/events.html",
-      "fetchedAt": "2026-08-06T22:59:37.930Z"
+      "fetchedAt": "2026-08-31T17:04:34.202Z"
     },
     {
       "id": "web-make-a-donation-html-50c8bfc9",
@@ -47,7 +47,7 @@
       "id": "web-programs-mentoringafterschool-html-a079e931",
       "title": "Mentoring After School Program | Mentor Me North Georgia | Empowering Today’s Youth | Non-Profit Mentoring Program",
       "url": "https://www.mentorga.org/programs_mentoringafterschool.html",
-      "fetchedAt": "2026-08-06T22:59:39.545Z"
+      "fetchedAt": "2026-08-31T17:04:35.700Z"
     },
     {
       "id": "web-programs-onetoone-html-eda45db3",
@@ -118,13 +118,7 @@
       "url": "https://www.mentorga.org/2024-MM-ImpactReport_email.pdf"
     }
   ],
-  "totalDocumentsUploaded": 18,
+  "totalDocumentsUploaded": 0,
   "uploadFailures": [],
-  "fileSearchStoreName": "fileSearchStores/mentorme-grounded-knowledge-sfl2wn3anp4q",
-  "syncMode": "new-store",
-  "totalDocumentsDeleted": 0,
-  "totalDocumentsUnchanged": 0,
-  "managedDocumentsAfterSync": 18,
-  "deleteFailures": [],
-  "uploadedAt": "2026-08-07T01:15:07.299Z"
+  "fileSearchStoreName": null
 }
