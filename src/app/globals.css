@@ -250,7 +250,7 @@ a { color: inherit; text-decoration: none; }
 .chat-send-button:disabled { color: #aaa5ae; background: #e5e0e2; cursor: not-allowed; }
 .chat-grounding-note { margin: 6px 0 0; color: #9a98a2; font-size: 7px; text-align: center; }
 
-.embed-page { width: 100%; min-height: 100dvh; margin: 0; background: transparent; }
+.embed-page { width: 100%; min-height: 100dvh; margin: 0; background: var(--cream-50); }
 .chat-theme-dark .chat-panel { background: #171b2e; border-color: #373b53; }
 .chat-theme-dark .chat-launcher-nudge { color: #f1edf4; background: #24293e; border-color: #444960; }
 .chat-theme-dark .chat-launcher-nudge::after { background: #24293e; border-color: #444960; }

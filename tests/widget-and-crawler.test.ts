@@ -66,6 +66,13 @@ describe("widget and crawler boundaries", () => {
     expect(loader).toContain("#632d8f");
   });
 
+  it("gives embedded chat an opaque canvas so the host page cannot show through", () => {
+    const styles = readFileSync("src/app/globals.css", "utf8");
+    expect(styles).toContain(
+      ".embed-page { width: 100%; min-height: 100dvh; margin: 0; background: var(--cream-50); }",
+    );
+  });
+
   it("keeps the crawler on public MentorMe HTML routes", () => {
     expect(isCrawlableUrl("https://mentorga.org/food-pantry/?utm_source=x")).toBe(
       true,
