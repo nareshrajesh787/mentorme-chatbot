@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
+  var EMBED_CLOSE_MESSAGE_TYPE = "mentorme-chatbot:close";
+
   var script = document.currentScript;
   if (!script || script.dataset.mentorMeLoaded === "true") return;
   script.dataset.mentorMeLoaded = "true";
@@ -91,6 +93,7 @@
     ".tp-panel{position:relative;display:none;width:min(390px,calc(100vw - 28px));height:min(650px,calc(100vh - 90px));margin-bottom:12px;overflow:hidden;background:#fff;border:1px solid rgba(37,33,62,.14);border-radius:20px;box-shadow:0 28px 80px rgba(19,21,42,.28)}" +
     ".tp-panel[data-open=true]{display:block;animation:tp-pop .2s ease-out}" +
     ".tp-frame{display:block;width:100%;height:100%;border:0;background:#fbfaf8}" +
+    ".tp-loading{position:absolute;inset:0;z-index:1;display:grid;place-items:center;padding:28px;color:#4a2268;background:#fbfaf8;font:700 14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;text-align:center;transition:opacity .18s ease}.tp-panel[data-ready=true] .tp-loading{opacity:0;pointer-events:none}" +
     ".tp-close{position:absolute;z-index:2;top:10px;display:grid;width:34px;height:34px;place-items:center;padding:0;color:#fff;background:#2c2140;border:1px solid rgba(255,255,255,.18);border-radius:9px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}" +
     ".tp-close-bottom-right{right:10px}.tp-close-bottom-left{left:10px}" +
     ".tp-close:hover{background:#5a9418}" +
@@ -109,6 +112,8 @@
   var panel = document.createElement("div");
   panel.className = "tp-panel";
   panel.setAttribute("data-open", "false");
+  panel.setAttribute("data-ready", "false");
+  panel.setAttribute("aria-busy", "true");
 
   var closeButton = document.createElement("button");
   closeButton.type = "button";
@@ -165,13 +170,33 @@
   var iframe = document.createElement("iframe");
   iframe.className = "tp-frame";
   iframe.title = "MentorMe information assistant";
-  iframe.loading = "lazy";
+  iframe.loading = "eager";
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
   iframe.setAttribute(
     "sandbox",
     "allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox",
   );
   iframe.src = chatbotUrl.toString();
+
+  var loading = document.createElement("div");
+  loading.className = "tp-loading";
+  loading.setAttribute("role", "status");
+  loading.setAttribute("aria-live", "polite");
+  loading.textContent = "Loading MentorMe assistant…";
+  function markFrameLoading() {
+    panel.setAttribute("data-ready", "false");
+    panel.setAttribute("aria-busy", "true");
+    loading.textContent = "Loading MentorMe assistant…";
+  }
+  iframe.addEventListener("load", function () {
+    panel.setAttribute("data-ready", "true");
+    panel.setAttribute("aria-busy", "false");
+  });
+  iframe.addEventListener("error", function () {
+    panel.setAttribute("aria-busy", "false");
+    loading.textContent = "The assistant could not load. Please close and try again.";
+  });
+  markFrameLoading();
 
   var launcher = document.createElement("button");
   launcher.type = "button";
@@ -237,6 +262,18 @@
       launcher.focus();
     }
   }
+
+  window.addEventListener("message", function (event) {
+    if (
+      event.origin !== chatbotUrl.origin ||
+      event.source !== iframe.contentWindow ||
+      !event.data ||
+      event.data.type !== EMBED_CLOSE_MESSAGE_TYPE
+    ) {
+      return;
+    }
+    setOpen(false);
+  });
 
   function constrainPanelSize(width, height) {
     var maximumWidth = Math.max(280, Math.min(720, window.innerWidth - 36));
@@ -332,6 +369,7 @@
   });
 
   panel.appendChild(iframe);
+  panel.appendChild(loading);
   panel.appendChild(resizeButton);
   panel.appendChild(closeButton);
   root.appendChild(style);

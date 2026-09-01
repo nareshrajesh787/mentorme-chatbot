@@ -48,6 +48,12 @@ describe("widget and crawler boundaries", () => {
     expect(loader).toContain("nudgeText.textContent = promptText");
     expect(loader).toContain('nudgeAction.addEventListener("click"');
     expect(loader).toContain('nudgeClose.addEventListener("click"');
+    expect(loader).toContain('iframe.loading = "eager"');
+    expect(loader).toContain("Loading MentorMe assistant");
+    expect(loader).toContain('panel.setAttribute("data-ready", "true")');
+    expect(loader).toContain('event.origin !== chatbotUrl.origin');
+    expect(loader).toContain('event.source !== iframe.contentWindow');
+    expect(loader).toContain('event.data.type !== EMBED_CLOSE_MESSAGE_TYPE');
   });
 
   it("uses MentorMe's brand colors, not The Place's original palette", () => {

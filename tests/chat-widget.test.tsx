@@ -5,6 +5,7 @@ import {
   CHAT_NUDGE_DELAY_MS,
   CHAT_NUDGE_SESSION_KEY,
   CHAT_NUDGE_VISIBLE_MS,
+  EMBED_CLOSE_MESSAGE_TYPE,
   ChatWidget,
 } from "@/components/chatbot/ChatWidget";
 
@@ -54,6 +55,16 @@ describe("chat widget lifecycle", () => {
       ) as HTMLTextAreaElement).value,
     ).toBe("");
     expect(screen.getAllByText(/approved information from MentorMe/i)).toHaveLength(1);
+  });
+
+  it("keeps embedded chat ready when the host is asked to minimize it", () => {
+    render(<ChatWidget variant="embedded" initialOpen launcherVisible={false} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Minimize chat" }));
+
+    expect(screen.getByRole("dialog")).toBeDefined();
+    expect(screen.queryByRole("button", { name: "Open MentorMe assistant" })).toBeNull();
+    expect(EMBED_CLOSE_MESSAGE_TYPE).toBe("mentorme-chatbot:close");
   });
 
   it("places the resize handle on the inward corner", () => {

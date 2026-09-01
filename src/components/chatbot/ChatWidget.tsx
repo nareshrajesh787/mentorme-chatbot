@@ -9,6 +9,7 @@ import { ChatIcon, CloseIcon } from "@/components/chatbot/Icons";
 export const CHAT_NUDGE_DELAY_MS = 2200;
 export const CHAT_NUDGE_VISIBLE_MS = 9000;
 export const CHAT_NUDGE_SESSION_KEY = "mentorme-chatbot-nudge-seen";
+export const EMBED_CLOSE_MESSAGE_TYPE = "mentorme-chatbot:close";
 
 interface ChatWidgetProps {
   variant?: "floating" | "embedded";
@@ -32,7 +33,7 @@ export function ChatWidget({
   const [nudgeVisible, setNudgeVisible] = useState(false);
   const nudgeAttemptedRef = useRef(initialOpen);
   const embedded = variant === "embedded";
-  const showLauncher = !open && (launcherVisible || embedded);
+  const showLauncher = !open && launcherVisible;
 
   function markNudgeSeen() {
     nudgeAttemptedRef.current = true;
@@ -90,7 +91,30 @@ export function ChatWidget({
     setOpen(true);
   }
 
+  function notifyEmbeddingHostToClose() {
+    if (!embedded || window.parent === window) return;
+
+    let targetOrigin = "*";
+    try {
+      targetOrigin = new URL(document.referrer).origin;
+    } catch {
+      // A missing or privacy-trimmed referrer still needs to close the host.
+    }
+
+    window.parent.postMessage({ type: EMBED_CLOSE_MESSAGE_TYPE }, targetOrigin);
+  }
+
+  function minimizePanel() {
+    notifyEmbeddingHostToClose();
+    // The host loader owns visibility for embedded chat. Keeping this frame
+    // mounted and open prevents a blank panel when the visitor opens it again.
+    if (embedded) return;
+    setOpen(false);
+  }
+
   function closePanel() {
+    notifyEmbeddingHostToClose();
+    if (embedded) return;
     setOpen(false);
     setPanelMounted(false);
   }
@@ -105,7 +129,7 @@ export function ChatWidget({
             embedded={embedded}
             active={open}
             position={position}
-            onMinimize={() => setOpen(false)}
+            onMinimize={minimizePanel}
             onClose={closePanel}
           />
         </div>
