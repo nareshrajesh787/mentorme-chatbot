@@ -68,6 +68,9 @@
   host.style[position === "bottom-left" ? "left" : "right"] = "18px";
   host.style.fontFamily =
     'Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  // Host sites can have broad rules such as `div { opacity: .8 }`. Lock the
+  // widget host to full opacity so their page never bleeds through the iframe.
+  host.style.setProperty("opacity", "1", "important");
 
   var root = host.attachShadow ? host.attachShadow({ mode: "closed" }) : host;
   var style = document.createElement("style");

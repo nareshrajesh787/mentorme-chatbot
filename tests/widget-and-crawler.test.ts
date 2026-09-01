@@ -54,6 +54,7 @@ describe("widget and crawler boundaries", () => {
     expect(loader).toContain('event.origin !== chatbotUrl.origin');
     expect(loader).toContain('event.source !== iframe.contentWindow');
     expect(loader).toContain('event.data.type !== EMBED_CLOSE_MESSAGE_TYPE');
+    expect(loader).toContain('host.style.setProperty("opacity", "1", "important")');
   });
 
   it("uses MentorMe's brand colors, not The Place's original palette", () => {
