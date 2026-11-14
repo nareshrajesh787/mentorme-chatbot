@@ -27,7 +27,7 @@ They listen.
 They seek to enrich.
 They explain and instruct.
 They share an interest or passion with a young person.
-Click the links below to view PDFs of the 2022 volunteers' job descriptions:
+Click the links below to review volunteer job descriptions:
 - Mentoring After School (MAS) Program Volunteer
 - Connect Club: Small Group Leader
 - One-to-One Mentor Program Volunteer

@@ -3,7 +3,7 @@
 Source ID: web-become-a-volunteer-html-51d2898d
 Source type: official_website
 Canonical URL: https://www.mentorga.org/become-a-volunteer.html
-Fetched at: 2026-09-26T14:12:41.405Z
+Fetched at: 2026-11-14T16:34:55.647Z
 
 ## Page content
 
@@ -23,7 +23,7 @@ They listen.
 They seek to enrich.
 They explain and instruct.
 They share an interest or passion with a young person.
-Click the links below to view PDFs of the 2022 volunteers' job descriptions:
+Click the links below to review volunteer job descriptions:
 - Mentoring After School (MAS) Program Volunteer
 - Connect Club: Small Group Leader
 - One-to-One Mentor Program Volunteer
